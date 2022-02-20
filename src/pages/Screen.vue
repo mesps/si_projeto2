@@ -4,6 +4,12 @@
       <span class="text-black text-bold text-h5 counter" ref="foodCounter">
         Comida: {{ foodCounter }}
       </span>
+      <car
+        :screenWidth="width"
+        :screenHeight="height"
+        :foodCoordinates="foodCoordinates"
+        @ateFood="nextFood"
+      />
       <food
         v-if="showFood"
         :screenWidth="width"
@@ -17,11 +23,13 @@
 
 <script>
 import food from 'components/Food'
+import car from 'components/Car'
 
 export default {
   name: 'PageIndex',
   components: {
-    food
+    food,
+    car
   },
   data () {
     return {
@@ -46,6 +54,16 @@ export default {
     onResize (size) {
       this.boundingClientRect = this.$refs.screen.$el.getBoundingClientRect()
     },
+
+    nextFood () {
+      this.foodCounter += 1
+      this.showFood = false
+      this.foodCoordinates = null
+
+      setInterval(() => {
+        this.showFood = true
+      }, 100)
+    }
   }
 }
 </script>
