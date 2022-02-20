@@ -17,7 +17,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.generateCoordinate()
-    }, 200)
+    }, 300)
   },
   computed: {
     stylePosition () {
@@ -26,8 +26,8 @@ export default {
   },
   methods: {
     generateCoordinate () {
-      this.xCoord = this.randomIntFromInterval(0, this.width)
-      this.yCoord = this.randomIntFromInterval(0, this.height)
+      this.xCoord = this.randomIntFromInterval(5, this.width - 47)
+      this.yCoord = this.randomIntFromInterval(5, this.height - 85)
     },
     randomIntFromInterval(min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min)
