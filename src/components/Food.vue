@@ -1,13 +1,19 @@
 <template>
   <div v-show="xCoord && yCoord">
-    <q-icon name="las la-pizza-slice" color="orange-9" size="32px" :style="stylePosition"/>
+    <q-icon
+      ref="food"
+      name="las la-pizza-slice"
+      color="orange-9"
+      size="32px"
+      :style="stylePosition"
+    />
   </div>
 </template>
 
 <script>
 export default {
   name: 'Food',
-  props: ['topLimit', 'bottomLimit', 'rightLimit', 'leftLimit', 'width', 'height'],
+  props: ['screenWidth', 'screenHeight'],
   data () {
     return {
       xCoord: 0,
@@ -26,8 +32,15 @@ export default {
   },
   methods: {
     generateCoordinate () {
-      this.xCoord = this.randomIntFromInterval(5, this.width - 47)
-      this.yCoord = this.randomIntFromInterval(5, this.height - 85)
+      this.xCoord = this.randomIntFromInterval(5, this.screenWidth - 47)
+      this.yCoord = this.randomIntFromInterval(5, this.screenHeight - 85)
+
+      setTimeout(() => {
+        const x = this.$refs.food.$el.getBoundingClientRect().x
+        const y = this.$refs.food.$el.getBoundingClientRect().y
+
+        this.$emit('foodCoordinates', { x, y })
+      }, 100)
     },
     randomIntFromInterval(min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min)

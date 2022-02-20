@@ -5,12 +5,10 @@
         Comida: {{ foodCounter }}
       </span>
       <food
-        :rightLimit="rightLimit"
-        :leftLimit="leftLimit"
-        :topLimit="topLimit"
-        :bottomLimit="bottomLimit"
-        :width="width"
-        :height="height"
+        v-if="showFood"
+        :screenWidth="width"
+        :screenHeight="height"
+        @foodCoordinates="coordinates => foodCoordinates = coordinates"
       />
     </q-card>
     <q-resize-observer @resize="onResize" />
@@ -28,22 +26,12 @@ export default {
   data () {
     return {
       foodCounter: 0,
+      foodCoordinates: null,
+      showFood: true,
       boundingClientRect: null
     }
   },
   computed: {
-    rightLimit () {
-      return (this.boundingClientRect && this.boundingClientRect.right) || 0
-    },
-    leftLimit () {
-      return (this.boundingClientRect && this.boundingClientRect.left) || 0
-    },
-    topLimit () {
-      return (this.boundingClientRect && this.boundingClientRect.top) || 0
-    },
-    bottomLimit () {
-      return (this.boundingClientRect && this.boundingClientRect.bottom) || 0
-    },
     width () {
       return (this.boundingClientRect && this.boundingClientRect.width) || 0
     },
@@ -71,6 +59,6 @@ export default {
   background-color: #DEDEDE
 
   .counter
-    position: static
+  position: static
 
 </style>
