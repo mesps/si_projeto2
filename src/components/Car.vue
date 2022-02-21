@@ -4,6 +4,7 @@
       ref="car"
       class="car"
       :style="stylePosition"
+      :class="rotationClass + ' ' + directionClass"
     />
   </div>
 </template>
@@ -17,20 +18,31 @@ export default {
       xCoord: 0,
       yCoord: 0,
       stepSize: 1,
-      moveMilliseconds: 15,
-      startMoviment: false
+      moveMilliseconds: 12,
+      rotateMilliseconds: 200,
+      startMoviment: false,
+      rotationClass: 'rotate0',
+      directionClass: 'directionUp'
     }
   },
   computed: {
     stylePosition () {
       return `position: relative; left: ${this.xCoord}px; top: ${this.yCoord}px; z-index: 100`
+    },
+
+    direction () {
+      return {
+        down: this.directionClass === 'directionDown',
+        up: this.directionClass === 'directionUp',
+        right: this.directionClass === 'directionRight',
+        left: this.directionClass === 'directionLeft'
+      }
     }
   },
   watch: {
     foodCoordinates: {
       deep: true,
       handler (val) {
-        console.log(val)
         if (val) this.startMoviment = true
         else this.startMoviment = false
       }
@@ -62,14 +74,37 @@ export default {
       this.yCoord = (this.screenHeight - 132) / 2
     },
 
+    rotateAndMove (rotationClass, directionClass, moveFunction) {
+      this.rotationClass = rotationClass
+
+      setTimeout(() => {
+        this.rotationClass = ''
+        this.directionClass = directionClass
+
+        moveFunction()
+      }, this.rotateMilliseconds)
+    },
+
     controlYMoviment () {
       const carCoordinates = this.carPositionOnScreen()
-  
+      const moveFunctionDown = () => this.moveY(this.moveDown)
+      const moveFunctionUp = () => this.moveY(this.moveUp)
+
+      // go down
       if (carCoordinates.y < this.foodCoordinates.y) {
-        this.moveY(this.moveDown)
+        if (this.direction.down) this.moveY(this.moveDown)
+        else if (this.direction.right) this.rotateAndMove('rotate90', 'directionDown', moveFunctionDown)
+        else if (this.direction.left) this.rotateAndMove('rotateMinus90', 'directionDown', moveFunctionDown)
+        else if (this.direction.up) this.rotateAndMove('rotate180', 'directionDown', moveFunctionDown)
+
+      // go up
       } else if (carCoordinates.y > this.foodCoordinates.y) {
-        this.moveY(this.moveUp)
-      }
+        if (this.direction.up) this.moveY(this.moveUp)
+        else if (this.direction.left) this.rotateAndMove('rotate90', 'directionUp', moveFunctionUp)
+        else if (this.direction.right) this.rotateAndMove('rotateMinus90', 'directionUp', moveFunctionUp)
+        else if (this.direction.down) this.rotateAndMove('rotate180', 'directionUp', moveFunctionUp)
+      } 
+      else this.controlXMoviment()
     },
 
     moveY (moveFunction) {
@@ -87,11 +122,22 @@ export default {
 
     controlXMoviment () {
       const carCoordinates = this.carPositionOnScreen()
+      const moveFunctionLeft = () => this.moveX(this.moveLeft)
+      const moveFunctionRight = () => this.moveX(this.moveRight)
 
+      // go to right
       if (carCoordinates.x < this.foodCoordinates.x) {
-        this.moveX(this.moveRight)
+        if (this.direction.right) this.moveX(this.moveRight)
+        else if (this.direction.up) this.rotateAndMove('rotate90', 'directionRight', moveFunctionRight)
+        else if (this.direction.down) this.rotateAndMove('rotateMinus90', 'directionRight', moveFunctionRight)
+        else if (this.direction.left) this.rotateAndMove('rotate180', 'directionRight', moveFunctionRight)
+
+      // go to left
       } else if (carCoordinates.x > this.foodCoordinates.x) {
-        this.moveX(this.moveLeft)
+        if (this.direction.left) this.moveX(this.moveLeft)
+        else if (this.direction.down) this.rotateAndMove('rotate90', 'directionLeft', moveFunctionLeft)
+        else if (this.direction.up) this.rotateAndMove('rotateMinus90', 'directionLeft', moveFunctionLeft)
+        else if (this.direction.right) this.rotateAndMove('rotate180', 'directionLeft', moveFunctionLeft)
       }
     },
 
@@ -131,29 +177,48 @@ export default {
   .car
     width: 0
     height: 0
+
+  .directionUp
     border-left: 10px solid transparent
     border-right: 10px solid transparent
     border-bottom: 20px solid #003366
   
-  .diretionRight
-    transform: rotate(90deg)
+  .directionDown
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-top: 20px solid #003366
 
-  .diretionLeft
-    transform: rotate(-90deg)
-  
-  .diretionDown
-    transform: rotate(180deg)
+  .directionLeft
+    border-top: 10px solid transparent
+    border-bottom: 10px solid transparent 
+    border-right: 20px solid #003366
 
-  @keyframes rotateLeft
-    100%
-      transform: rotate(-90deg)
-  
-  @keyframes rotateRight
+  .directionRight
+    border-top: 10px solid transparent
+    border-bottom: 10px solid transparent
+    border-left: 20px solid #003366
+
+  .rotate90
+    animation: rotate90 0.2s
+    animation-fill-mode: forwards
+
+  .rotate180
+    animation: rotate180 0.2s
+    animation-fill-mode: forwards
+
+  .rotateMinus90
+    animation: rotateMinus90 0.2s
+    animation-fill-mode: forwards
+
+  @keyframes rotate90
     100%
       transform: rotate(90deg)
   
-  @keyframes rotateDown
+  @keyframes rotate180
     100%
       transform: rotate(180deg)
 
+  @keyframes rotateMinus90
+    100%
+      transform: rotate(-90deg)
 </style>
