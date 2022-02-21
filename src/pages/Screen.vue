@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card flat bordered class="screen q-pa-md" ref="screen">
+  <q-page :class="$q.screen.gt.xs ? 'flex flex-center' : 'column q-pa-md'">
+    <q-card flat bordered class="screen q-pa-md" :class="$q.screen.gt.xs ? 'rect' : 'col'" ref="screen">
       <span class="text-black text-bold text-h5 counter" ref="foodCounter">
         Comida: {{ foodCounter }}
       </span>
@@ -85,10 +85,12 @@ export default {
 </script>
 
 <style lang="sass">
- .screen
+ .rect
   height: 400px
   width: 600px
   min-width: 600px
+  
+ .screen
   border: 2px solid #00023C
   background-color: #DEDEDE
 
