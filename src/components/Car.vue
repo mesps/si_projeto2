@@ -18,7 +18,7 @@ export default {
       xCoord: 0,
       yCoord: 0,
       stepSize: 1,
-      moveMilliseconds: 12,
+      moveMilliseconds: 8,
       rotateMilliseconds: 200,
       startMoviment: false,
       rotationClass: 'rotate0',
@@ -115,14 +115,14 @@ export default {
 
     moveY (moveFunction) {
       // Um loop de intervalos que para apenas quando chega na posição certa de Y
-      const interval = setInterval(() => {
+      setTimeout(() => {
         moveFunction()
   
         const carCoordinates = this.carPositionOnScreen()
         if (carCoordinates.y === this.foodCoordinates.y) {
-          clearInterval(interval)
-  
           this.controlXMoviment()
+        } else {
+          this.controlYMoviment()
         }
       }, this.moveMilliseconds)
     },
@@ -150,15 +150,15 @@ export default {
 
     moveX (moveFunction) {
       // Um loop de intervalos que para apenas quando chega na posição certa de X
-      const interval = setInterval(() => {
+      setTimeout(() => {
         moveFunction()
   
         const carCoordinates = this.carPositionOnScreen()
         if (carCoordinates.x === this.foodCoordinates.x) {
-          clearInterval(interval)
-
           // Emite evento de colisão com a comida
           this.$emit('ateFood')
+        } else {
+          this.controlXMoviment()
         }
       }, this.moveMilliseconds)
     },
