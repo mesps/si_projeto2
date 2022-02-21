@@ -43,13 +43,15 @@ export default {
     foodCoordinates: {
       deep: true,
       handler (val) {
+        // Começa o movimento quando recebe as coordenadas da comida
         if (val) this.startMoviment = true
         else this.startMoviment = false
       }
     },
-    startMoviment (val) {
-      if (val) {
+    startMoviment () {
+      if (this.startMoviment) {
         setTimeout(() => {
+          // Começa se movimentando no eixo Y
           this.controlYMoviment()
         }, 200)
       }
@@ -57,6 +59,7 @@ export default {
   },
   mounted () {
     setTimeout(() => {
+      // Posiciona o carro no centro
       this.positionOnCenter()
     }, 100)
 
@@ -75,10 +78,13 @@ export default {
     },
 
     rotateAndMove (rotationClass, directionClass, moveFunction) {
+      // Adiciona classe CSS que gira o carro
       this.rotationClass = rotationClass
 
       setTimeout(() => {
         this.rotationClass = ''
+
+        // Adiciona classe CSS que corresponde a direção em que o carro se encontras
         this.directionClass = directionClass
 
         moveFunction()
@@ -108,6 +114,7 @@ export default {
     },
 
     moveY (moveFunction) {
+      // Um loop de intervalos que para apenas quando chega na posição certa de Y
       const interval = setInterval(() => {
         moveFunction()
   
@@ -142,6 +149,7 @@ export default {
     },
 
     moveX (moveFunction) {
+      // Um loop de intervalos que para apenas quando chega na posição certa de X
       const interval = setInterval(() => {
         moveFunction()
   
@@ -149,6 +157,7 @@ export default {
         if (carCoordinates.x === this.foodCoordinates.x) {
           clearInterval(interval)
 
+          // Emite evento de colisão com a comida
           this.$emit('ateFood')
         }
       }, this.moveMilliseconds)

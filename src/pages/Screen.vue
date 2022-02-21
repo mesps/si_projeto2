@@ -55,14 +55,30 @@ export default {
       this.boundingClientRect = this.$refs.screen.$el.getBoundingClientRect()
     },
 
-    nextFood () {
-      this.foodCounter += 1
+    cleanFood () {
       this.showFood = false
       this.foodCoordinates = null
+    },
 
+    addToCounter () {
+      this.foodCounter += 1
+    },
+
+    createNewFood () {
       setInterval(() => {
         this.showFood = true
       }, 100)
+    },
+
+    nextFood () {
+      // Contabiliza
+      this.addToCounter()
+
+      // Limpa
+      this.cleanFood()
+
+      // Gera nova comida
+      this.createNewFood()
     }
   }
 }

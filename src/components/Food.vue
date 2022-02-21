@@ -23,8 +23,11 @@ export default {
     }
   },
   mounted () {
-    this.foodIcon = this.foodOptions[this.randomIntFromInterval(0, 7)]
+    // Gera uma comida aleatória
+    this.foodIcon = this.generateRandomFood()
+
     setTimeout(() => {
+      // Gera uma posição aleatória
       this.generateCoordinate()
     }, 300)
   },
@@ -34,10 +37,19 @@ export default {
     }
   },
   methods: {
+    generateRandomFood () {
+      const index = this.randomIntFromInterval(0, 7)
+      return this.foodOptions[index]
+    },
+
     generateCoordinate () {
       this.xCoord = this.randomIntFromInterval(2, this.screenWidth - 49)
       this.yCoord = this.randomIntFromInterval(1, this.screenHeight - 100)
 
+      this.emitCoordinates()
+    },
+
+    emitCoordinates () {
       setTimeout(() => {
         const x = this.$refs.food.$el.getBoundingClientRect().x
         const y = this.$refs.food.$el.getBoundingClientRect().y
@@ -45,6 +57,7 @@ export default {
         this.$emit('foodCoordinates', { x, y })
       }, 100)
     },
+
     randomIntFromInterval(min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min)
     }
