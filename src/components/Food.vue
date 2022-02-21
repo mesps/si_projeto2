@@ -2,7 +2,7 @@
   <div v-show="xCoord && yCoord">
     <q-icon
       ref="food"
-      name="las la-pizza-slice"
+      :name="`las la-${foodIcon}`"
       color="orange-9"
       size="32px"
       :style="stylePosition"
@@ -17,10 +17,13 @@ export default {
   data () {
     return {
       xCoord: 0,
-      yCoord: 0
+      yCoord: 0,
+      foodOptions:  ['pizza-slice', 'hamburger', 'cheese', 'cookie', 'lemon', 'carrot', 'hotdog', 'apple-alt'],
+      foodIcon: ''
     }
   },
   mounted () {
+    this.foodIcon = this.foodOptions[this.randomIntFromInterval(0, 7)]
     setTimeout(() => {
       this.generateCoordinate()
     }, 300)
@@ -32,8 +35,8 @@ export default {
   },
   methods: {
     generateCoordinate () {
-      this.xCoord = this.randomIntFromInterval(5, this.screenWidth - 47)
-      this.yCoord = this.randomIntFromInterval(5, this.screenHeight - 85)
+      this.xCoord = this.randomIntFromInterval(2, this.screenWidth - 49)
+      this.yCoord = this.randomIntFromInterval(1, this.screenHeight - 100)
 
       setTimeout(() => {
         const x = this.$refs.food.$el.getBoundingClientRect().x
