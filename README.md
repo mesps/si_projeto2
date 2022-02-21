@@ -2,6 +2,8 @@
 
 Um projeto para a cadeira de Sistemas Inteligentes - CIn/UFPE
 
+Para ver o projeto rodando: https://mesps.github.io/si_projeto2/ 
+
 ## Install the dependencies
 ```bash
 yarn
