@@ -154,7 +154,7 @@ export default {
         moveFunction()
   
         const carCoordinates = this.carPositionOnScreen()
-        if (carCoordinates.x === this.foodCoordinates.x) {
+        if (Math.abs(carCoordinates.x - this.foodCoordinates.x) <= 1) {
           // Emite evento de colisão com a comida
           this.$emit('ateFood')
         } else {
